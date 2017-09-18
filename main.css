@@ -1,0 +1,67 @@
+html, body {
+  height: 100%;
+}
+
+body {
+  font-size: 16px;
+  font-family: 'Ubuntu', sans-serif;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background-color: #ccc;
+}
+
+.flights {
+  width: 800px;
+  height: 100%;
+  margin: 0 auto;
+  background-color: #eee;
+} 
+
+.flights__switches {
+  padding: 20px;
+  text-align: center;
+}
+
+.flights__switch {
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.flights__switch.-active {
+  background-color: #fff;
+}
+
+.flights__table-holder.-hidden {
+  display: none;
+}
+
+.flights__table-header {
+  font-size: 2em;
+  padding: 1em 20px;
+  background-color: #fc0;
+}
+
+.flights__table {
+  font-size: 21px;
+  font-family: 'Ubuntu Mono', monospace;
+  width: 100%;
+  padding: 0 20px;
+  border-spacing: 0;
+  border-collapse: collapse;
+  text-align: left;
+  color: #fff;
+  background-color: #210;
+}
+
+.flights__table thead {
+  font-size: 16px;
+  font-family: 'Ubuntu', sans-serif;
+  color: #000;
+  background-color: #fc0;
+}
+
+.flights__table th {
+  padding: 10px 0;
+}
