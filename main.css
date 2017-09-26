@@ -16,7 +16,7 @@ body {
   height: 100%;
   margin: 0 auto;
   background-color: #eee;
-} 
+}
 
 .flights__switches {
   padding: 20px;
@@ -63,5 +63,10 @@ body {
 }
 
 .flights__table th {
-  padding: 10px 0;
+  padding: 10px 20px;
+}
+
+.flights__table td {
+  padding: 6px 20px;
+  border-bottom: 2px solid #eee;
 }
