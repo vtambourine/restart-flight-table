@@ -12,7 +12,7 @@ body {
 }
 
 .flights {
-  width: 800px;
+  /*width: 800px;*/
   height: 100%;
   margin: 0 auto;
   background-color: #eee;
@@ -44,7 +44,7 @@ body {
 }
 
 .flights__table {
-  font-size: 21px;
+  font-size: 11px;
   font-family: 'Ubuntu Mono', monospace;
   width: 100%;
   padding: 0 20px;
