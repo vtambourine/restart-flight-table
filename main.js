@@ -2,45 +2,45 @@
 
 // Flight statuses for departing flights
 const DEPARTING_STATUSES = {
-  SCH: 'Scheduled',
-  DEL: 'Delayed',
-  WIL: 'Wait in Lounge',
-  GTO: 'Gate',
-  GCL: 'Gate Open',
-  GTD: 'Gate Closed',
-  GCH: 'Gate Changed',
-  BRD: 'Boarding',
-  DEP: 'Departed',
-  TOM: 'Tomorrow',
-  CNX: 'Cancelled'
+  SCH: { text: 'Scheduled',      mood:  0 },
+  DEL: { text: 'Delayed',        mood: -1 },
+  WIL: { text: 'Wait in Lounge', mood:  0 },
+  GTO: { text: 'Gate',           mood:  0 },
+  GCL: { text: 'Gate Open',      mood:  1 },
+  GTD: { text: 'Gate Closed',    mood: -1 },
+  GCH: { text: 'Gate Changed',   mood:  0 },
+  BRD: { text: 'Boarding',       mood:  1 },
+  DEP: { text: 'Departed',       mood:  0 },
+  TOM: { text: 'Tomorrow',       mood: -1 },
+  CNX: { text: 'Cancelled',      mood: -1 },
 };
 
 // Flight statuses for arriving flights
 const ARRIVING_STATUSES = {
-  SCH: 'Scheduled',
-  AIR: 'Airborne',
-  EXP: 'Expected',
-  FIR: 'Flight in Dutch airspace',
-  LND: 'Landed',
-  FIB: 'FIBAG',
-  ARR: 'Arrived',
-  DIV: 'Diverted',
-  CNX: 'Cancelled',
-  TOM: 'Tomorrow',
+  SCH: { text: 'Scheduled',                mood:  0 },
+  AIR: { text: 'Airborne',                 mood:  0 },
+  EXP: { text: 'Expected',                 mood:  0 },
+  FIR: { text: 'Flight in Dutch airspace', mood:  0 },
+  LND: { text: 'Landed',                   mood:  1 },
+  FIB: { text: 'FIBAG',                    mood:  0 },
+  ARR: { text: 'Arrived',                  mood:  0 },
+  DIV: { text: 'Diverted',                 mood: -1 },
+  CNX: { text: 'Cancelled',                mood: -1 },
+  TOM: { text: 'Tomorrow',                 mood: -1 }
 };
 
 // Flight directions
 const FLIGHT_DIRECTIONS = {
   DEPARTING: 'D',
-  ARRIVING: 'A'
+  ARRIVING:  'A'
 };
 
 // Service type of flight
 const FLIGHT_TYPES = {
-  PASSENGER_LINE: 'J',
+  PASSENGER_LINE:    'J',
   PASSENGER_CHARTER: 'C',
-  FREIGHT_LINE: 'F',
-  FREIGHT_CHARTER: 'H'
+  FREIGHT_LINE:      'F',
+  FREIGHT_CHARTER:   'H'
 }
 
 /**
@@ -71,8 +71,21 @@ class Flight {
     var statuses = flight.flightDirection === FLIGHT_DIRECTIONS.DEPARTING
       ? DEPARTING_STATUSES : ARRIVING_STATUSES;
     this.statuses = flight.publicFlightState.flightStates
-      .map(state => statuses[state])
-      .join(' | ');
+      .map(state => {
+        let status = statuses[state]
+        let mood = '';
+        switch (status.mood) {
+          case 1:
+            mood = 'positive';
+            break;
+          case -1:
+            mood = 'negative';
+            break;
+        }
+
+        return `<span class="${mood}">${status.text}</span>`
+      })
+      .join('');
   }
 
   renderNode(header) {
@@ -181,7 +194,7 @@ class FlightApi {
     this.requestPage = 0;
 
     // Maximin call limit to prevent loops
-    this.callLimit = 1;
+    this.callLimit = 5;
   }
   
   // Direction: 'A' for arrival, 'D' for departure
