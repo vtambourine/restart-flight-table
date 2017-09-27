@@ -30,6 +30,10 @@ body{
     color: #ffd257;   
 }
 
+.status{
+    color: #ffd257;      
+}
+
 .status.negative{
     color: #ff6c6c;
 }

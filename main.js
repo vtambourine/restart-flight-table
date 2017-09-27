@@ -88,11 +88,11 @@ class Flight {
   render() {
     return $(`
       <tr>
-        <td>${this.name}</td>
+        <td class="flight-number">${this.name}</td>
         <td>${this.route}</td>
         <td>${this.time}</td>
-        <td>${this.gate}</td>
-        <td>${this.statuses}</td>
+        <td class="gate">${this.gate}</td>
+        <td class="status">${this.statuses}</td>
       </tr>
     `)[0];
   }
@@ -262,8 +262,9 @@ class FlightApi {
 
 (function () {
 
+
   const departuresFlightTable = new FlightTable(
-    document.getElementById('flight-table-d'),
+  document.getElementById('flight-departures-table'),
     { 
       direction: FLIGHT_DIRECTIONS.DEPARTING,
       headers: [
@@ -280,7 +281,7 @@ class FlightApi {
   $('#refresh-d').click(departuresFlightTable.fetchFlights);
 
   const arrivalsFlightTable = new FlightTable(
-    document.getElementById('flight-table-a'),
+    document.getElementById('flight-arrivals-table'),
     { 
       direction: FLIGHT_DIRECTIONS.ARRIVING,
       headers: [

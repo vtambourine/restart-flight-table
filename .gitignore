@@ -57,4 +57,10 @@ typings/
 # dotenv environment variables file
 .env
 
+# Sublime project files
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+design/.DS_Store
+
 secrets.js
