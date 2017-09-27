@@ -43,6 +43,10 @@ body{
     border-bottom: 1px solid #555;
 }
 
+.board-table th{
+    padding: 12px 6px;
+}
+
 .board-table td{
     padding: 4px 6px;
 }
