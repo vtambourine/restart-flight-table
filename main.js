@@ -67,11 +67,11 @@ class Flight {
   render() {
     this.element = $(`
       <tr>
-        <td>${this.number}</td>
+        <td class="flight-number">${this.number}</td>
         <td>${this.destinations}</td>
         <td>${this.time}</td>
-        <td>${this.gate}</td>
-        <td>${this.status}</td>
+        <td  class="gate">${this.gate}</td>
+        <td  class="status">${this.status}</td>
       </tr>
     `);
     return this.element[0];
@@ -268,7 +268,7 @@ class FlightApi {
     'Destination'
   ]);
 
-  flightTable.render(document.getElementById('flight-table'));
+  flightTable.render(document.getElementById('flight-departures-table'));
 
   const api = new FlightApi({
     appId: window.B.app_id,

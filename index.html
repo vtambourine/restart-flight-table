@@ -1,14 +1,99 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
-  <meta charset="utf-8" />
+  
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>FE Master Class</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->  
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link href="https://fonts.googleapis.com/css?family=Ubuntu|Ubuntu+Mono" rel="stylesheet" />
-  <link href="main.css" rel="stylesheet" />
+  
+  <!-- FONT
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,900|Share+Tech+Mono" rel="stylesheet">
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="stylesheet" href="normalize.css">
+  <link rel="stylesheet" href="skeleton.css">
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="favicon.png">
 
   <title>Re/Start | Flight Table</title>
+
 </head>
 <body>
+
+  <!-- Primary Page Layout
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <div class="container">
+    <div class="row">
+
+      <div class="six columns">
+        <h3 class="board-title">Departures</h3>
+        <table id="flight-departures-table" class="u-full-width board-table">
+          <thead>
+            <tr>
+              <th>Flight</th>
+              <th>Destination</th>
+              <th>Time</th>
+              <th>Gate</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!--
+            <tr>
+              <td class="flight-number">KL2234</td>
+              <td>Brussels</td>
+              <td>13:30</td>
+              <td class="gate">44</td>
+              <td class="status negative">Delayed</td>
+            </tr>
+            -->
+          </tbody>
+        </table>      
+      </div>
+
+      <div class="six columns">
+        <h3 class="board-title">Arrivals</h3>
+        <table id="flight-arrivals-table" class="u-full-width board-table">
+          <thead>
+            <tr>
+              <th>Flight</th>
+              <th>Destination</th>
+              <th>Time</th>
+              <th>Gate</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!--
+            <tr>
+              <td class="flight-number">KL334</td>
+              <td>London</td>
+              <td>13:40</td>
+              <td class="gate">89</td>
+              <td class="status positive">Landed</td>
+            </tr>
+            -->
+          </tbody>
+        </table>      
+      </div>
+    
+    </div>
+  </div>
+
+  <!--
   <div class="flights">
     <div class="flights__container">
       <div class="flights__switches">
@@ -32,30 +117,21 @@
               </tr>
             </thead>
             <tbody>
-              <!-- <tr>
-                <td>11:40</td>
-                <td>TK 1929</td>
-                <td>Istandul</td>
-              </tr>
-              <tr>
-                <td>12:40</td>
-                <td>SU 1199</td>
-                <td>Amsterdam</td>
-              </tr> -->
             </tbody>
           </table>
         </div>
 
         <div id="departures" class="flights__table-holder -hidden">
-
         </div>
       </div>
     </div>
   </div>
+  -->
 
   <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
   <script src="secrets.js"></script>
   <script src="main.js"></script>
 </body>
+
 </html>

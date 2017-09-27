@@ -1,0 +1,65 @@
+/*
+    Custom styles go here
+*/
+
+body{
+    background-color: #222;
+    color: #fafafa;
+}
+
+.board-title{    
+    background-color: #ffd257;
+    color: #000;
+    font-family: 'Roboto', sans-serif;
+    font-size: 20px;
+    font-weight: 900;
+    letter-spacing: initial;
+    margin-top: 20px;
+    padding: 10px 20px;
+}
+
+.board-table tbody{
+    font-family: 'Share Tech Mono', monospace;
+}
+
+.flight-number{
+    color: #ffd257;
+}
+
+.gate{
+    color: #ffd257;   
+}
+
+.status{
+    color: #ffd257;      
+}
+
+.status.negative{
+    color: #ff6c6c;
+}
+
+.status.positive{
+    color: #96d99d;
+}
+
+.board-table td,
+.board-table th{
+    border-bottom: 1px solid #555;
+}
+
+.board-table th{
+    padding: 12px 6px;
+}
+
+.board-table td{
+    padding: 4px 6px;
+}
+
+.board-table td:first-child{
+    padding-left: 0
+}
+
+.board-table td:last-child{
+    padding-right: 0;
+}
+
