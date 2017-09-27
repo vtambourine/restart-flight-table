@@ -1,5 +1,6 @@
 /* global $ */
 
+// Flight statuses for departing flights
 const DEPARTING_STATUSES = {
   SCH: 'Scheduled',
   DEL: 'Delayed',
@@ -14,6 +15,7 @@ const DEPARTING_STATUSES = {
   CNX: 'Cancelled'
 };
 
+// Flight statuses for arriving flights
 const ARRIVING_STATUSES = {
   SCH: 'Scheduled',
   AIR: 'Airborne',
@@ -27,11 +29,13 @@ const ARRIVING_STATUSES = {
   TOM: 'Tomorrow',
 };
 
+// Flight directions
 const FLIGHT_DIRECTIONS = {
   DEPARTING: 'D',
   ARRIVING: 'A'
 };
 
+// Service type of flight
 const FLIGHT_TYPES = {
   PASSENGER_LINE: 'J',
   PASSENGER_CHARTER: 'C',
@@ -39,142 +43,149 @@ const FLIGHT_TYPES = {
   FREIGHT_CHARTER: 'H'
 }
 
+/**
+ * Represents single flight. Can be both arriving or departing
+ */
 class Flight {
-  constructor(flight) {
-    this.name = flight.flightName;
-    this.number = flight.flightName;
-    this.date = flight.scheduleDate;
-    this.time = flight.scheduleTime;
 
+  constructor(flight) {
+    // Flight name
+    this.name = flight.flightName;
+
+    // Schedule date the commercial flgiht will be operated
+    this.date = flight.scheduleDate;
+
+    // Time of departure of the commercial flight
+    this.time = flight.scheduleTime.split(':').splice(0, 2).join(':')
+
+    // Main flight name in case of codeshare
     this.mainFlight = flight.mainFlight;
 
-    this.datetime = Date.parse(flight.actualOffBlockTime);
-    this.formattedString = this.datetime.toLocaleString();
-    this.destinations = flight.route.destinations.join(' — ');
+    // Number of scheduled gate
     this.gate = flight.gate || '';
-    this.terminal = flight.terminal;
-    this.status = flight.publicFlightState.flightStates
-      .map(state => DEPARTING_STATUSES[state])
-      .join(' | ');
 
-    this.element = null;
+    // Complete route of the flight
+    this.route = flight.route.destinations.join(' — ');
+    
+    // List of public statuses fo the flight
+    var statuses = flight.flightDirection === FLIGHT_DIRECTIONS.DEPARTING
+      ? DEPARTING_STATUSES : ARRIVING_STATUSES;
+    this.statuses = flight.publicFlightState.flightStates
+      .map(state => statuses[state])
+      .join(' | ');
   }
 
-  update(flightDetails) {
-    // console.log('fligth updated:', flightDetails);
+  renderNode(header) {
+    return $(`
+      <tr>
+        ${header.map(key => {
+          return `<td>${this[key]}</td>`
+        })}
+      </tr>
+    `)[0]
   }
 
   render() {
-    this.element = $(`
+    return $(`
       <tr>
-        <td>${this.number}</td>
-        <td>${this.destinations}</td>
+        <td>${this.name}</td>
+        <td>${this.route}</td>
         <td>${this.time}</td>
         <td>${this.gate}</td>
-        <td>${this.status}</td>
+        <td>${this.statuses}</td>
       </tr>
-    `);
-    return this.element[0];
+    `)[0];
   }
 
 }
 
 class FlightTable {
-  constructor(headers) {
-    this.headers = headers;
+  constructor(domNode, options) {
     this.flights = {};
-  }
 
-  render(tableElement) {
-    if (!(tableElement instanceof HTMLTableElement)) {
-      throw new Error('FlightTable#render: tableElement must be a <table>');
+    if (!(domNode instanceof HTMLTableElement)) {
+      throw new Error('FlightTable expect <table> node as first argument');
     }
-    this.element = tableElement;
-    this.tableHeader = tableElement.querySelector('thead');
+    this.tableNode = domNode;
+    this.tableBody = this.tableNode.querySelector('tbody');
+
+    this.direction = options.direction;
+    this.api = new FlightApi(options.direction, {
+      appId: window.B.app_id,
+      appKey: window.B.app_key
+    });
+
+    this.headers = options.headers;
   }
 
-  update(flightDetails) {
+  fetchFlights() {
+    this.api.getFlights(
+      (data) => {
+        data.flights.forEach((flight) => {
+          this.updateFlight(flight);
+        });
+      }, 
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
+
+  updateFlight(flightDetails) {
+    // Ignore if current flight is not main in codeshares
     if (flightDetails.mainFlight !== flightDetails.flightName) {
       return;
     }
 
-    if (
-      flightDetails.serviceType !== FLIGHT_TYPES.PASSENGER_LINE &&
-      flightDetails.serviceType !== FLIGHT_TYPES.PASSENGER_CHARTER
-    ) {
+    // Ignore if currect flight is not passenger flight
+    if (flightDetails.serviceType !== FLIGHT_TYPES.PASSENGER_LINE
+      && flightDetails.serviceType !== FLIGHT_TYPES.PASSENGER_CHARTER) {
       return;
     }
 
     let flight = this.flights[flightDetails.flightName];
 
-
     if (!flight) {
       flight = this.flights[flightDetails.flightName] = new Flight(flightDetails);
     }
 
-    flight.update(flightDetails);
     let flightNode = flight.render();
 
-    this.element.appendChild(flightNode);
-  }
-
-  has(flightId) {
-    return !!this.flgihts[flightId]
+    this.tableBody.appendChild(flightNode);
   }
 }
 
-class Time {
-  constructor(string) {
-    let stringParts = string.match(/^(\d{1,2}):(\d{1,2})(?::(\d{1,2}))?$/)
-    if (!stringParts || !stringParts[2]) {
-      console.log(stringParts, string)
-      throw new Error('Invalid Time');
-    }
-
-    this.hours = stringParts[1];
-    this.minutes = '0' + stringParts[2];
-    this.seconds = stringParts[3];
-    console.log(this.minutes.length)
-    if (this.minutes.length <= 1) {
-      this.minutes = '0' + this.minutes;
-    }
-
-    console.log(this.minutes)
-  }
-
-  format() {
-    return this.hours + ':' + this.minutes + (this.seconds ? ':' + this.seconds : '');
-  }
-
-  valueOf() {
-    return (this.seconds || 0) + this.minutes * 60 + this.hours * 3600;
-  }
-}
-
+/**
+ * Schiphol Airport API interface
+ */
 class FlightApi {
-  constructor({appId, appKey}) {
+  constructor(direction, { appId, appKey }) {
     this.appId = appId;
     this.appKey = appKey;
     this.destinationsCache = {};
 
+    this.direction = direction;
+
+    // Show flights from 20 minutes behind...
     let now = Date.now();
-    // Now - 5 hours
-    let startTime = new Date(now - 5 * 60 * 60 * 1000);
-    this.startTime = startTime.getHours() + ':' + startTime.getMinutes();
+    let startTime = new Date(now - 20 * 60 * 1000);
+    this.startTimeFormatted = startTime.getHours() + ':' + startTime.getMinutes();
 
-    // Start + 30 minutes
-    let endTime = new Date(startTime.getTime() + 30 * 60 * 1000);
-    this.endTimeRaw = endTime;
-    this.endTime = endTime.getHours() + ':' + endTime.getMinutes();
+    // ...in one hour interval
+    let endTime = new Date(startTime.getTime() + 60 * 60 * 1000);
+    this.endTime = endTime;
 
-    this.callLimit = 2;
+    // this.flights = {};
+
+    // Start from the first page of the response
+    this.requestPage = 0;
+
+    // Maximin call limit to prevent loops
+    this.callLimit = 1;
   }
   
   // Direction: 'A' for arrival, 'D' for departure
-  getFlights(direction, success, error, startTime) {
-    startTime = startTime || this.startTime;
-    console.log('fetch for', startTime)
-
+  getFlights(success, error) {
     $.ajax({
       url: 'https://api.schiphol.nl/public-flights/flights',
       headers: {
@@ -184,31 +195,20 @@ class FlightApi {
       data: {
         app_id: this.appId,
         app_key: this.appKey,
-        flightdirection: direction,
+        flightdirection: this.direction,
         includedelays: true,
-        scheduletime: startTime,
-        // scheduletime: '22:50',
+        scheduletime: this.startTimeFormatted,
         sort: '+scheduletime',
-        page: '0',
+        page: this.requestPage,
       },
       context: this,
-      success: function(data, status, xhr) {
+      success: function (data, status, xhr) {
         let lastFlight = data.flights[data.flights.length - 1];
-
-        console.log(data.flights)
-        // console.log(lastFlight);
-        // let endTime = new Time(this.endTime);
-        // let lastFlightTime = new Time(lastFlight.scheduleTime);
-    
         let lastFlightTime = new Date(`${lastFlight.scheduleDate} ${lastFlight.scheduleTime}`);
     
-        console.log(this.endTimeRaw > lastFlightTime);
-        if (this.endTimeRaw > lastFlightTime && --this.callLimit) {
-          this.getFlights(
-            direction, 
-            success, 
-            error, 
-            lastFlight.scheduleTime.replace(/:\d{2}$/, ''))
+        if (this.endTime > lastFlightTime && --this.callLimit) {
+          this.requestPage++;
+          this.getFlights(success, error);
         }
 
         success.apply(this, arguments);
@@ -262,36 +262,37 @@ class FlightApi {
 
 (function () {
 
-  const flightTable = new FlightTable([
-    'Time',
-    'Number',
-    'Destination'
-  ]);
+  const departuresFlightTable = new FlightTable(
+    document.getElementById('flight-table-d'),
+    { 
+      direction: FLIGHT_DIRECTIONS.DEPARTING,
+      headers: [
+        'name',
+        'route',
+        'time',
+        'gate',
+        'statuses'
+      ]
+    }
+  );
 
-  flightTable.render(document.getElementById('flight-table'));
+  departuresFlightTable.fetchFlights();
+  $('#refresh-d').click(departuresFlightTable.fetchFlights);
 
-  const api = new FlightApi({
-    appId: window.B.app_id,
-    appKey: window.B.app_key
-  });
-  
-  function getFlights() {
-    api.getFlights(
-      FLIGHT_DIRECTIONS.DEPARTING,
-      (data) => { 
-        data.flights.forEach(function (flight) {
-          flightTable.update(flight);
-        });
-      }, 
-      (error) => {
-        console.log(error);
-      }
-    );
-  }
-  
-  $('#refresh').click(getFlights);
-  
-  getFlights();
+  const arrivalsFlightTable = new FlightTable(
+    document.getElementById('flight-table-a'),
+    { 
+      direction: FLIGHT_DIRECTIONS.ARRIVING,
+      headers: [
+        'name',
+        'route',
+        'time',
+        'gate',
+        'statuses'
+      ] 
+    }
+  );
+  arrivalsFlightTable.fetchFlights();
+  $('#refresh-a').click(arrivalsFlightTable.fetchFlights);
+
 })();
-
-
