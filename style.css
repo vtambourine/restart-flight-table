@@ -47,9 +47,10 @@ body {
 }
 
 .status span {
-    /*display: none;*/
+    display: none;
 }
 
+.status span:only-child,
 .status span.visible {
     display: block;
 }
