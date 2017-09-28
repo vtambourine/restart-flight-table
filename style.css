@@ -23,19 +23,35 @@ body{
 }
 
 .flight-number{
+    width: 20%;
     color: #ffd257;
 }
 
+.destination{
+    width: 25%;
+}
+
+.time{
+    width: 15%;
+}
+
 .gate{
+    width: 10%;
     color: #ffd257;   
 }
 
 .status{
-    color: #ffd257;      
+    color: #ffd257;
+    width: 30%;
+    text-align: right;
 }
 
 .status span {
-  margin-right: 6px;
+    display: none;
+}
+
+.status span.visible{
+    display: block;
 }
 
 .status .negative{
@@ -53,17 +69,113 @@ body{
 
 .board-table th{
     padding: 12px 6px;
+    color: #FFF
 }
 
 .board-table td{
     padding: 4px 6px;
 }
 
-.board-table td:first-child{
+.board-table td:first-child,
+.board-table th:first-child{
     padding-left: 0
 }
 
-.board-table td:last-child{
+.board-table td:last-child,
+.board-table th:last-child{
     padding-right: 0;
 }
 
+.loading {
+    position: relative;
+}
+
+.loading:before {
+    content: " ";
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    left: -10px;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    background-color: #333;
+    border-radius: 100%;  
+    -webkit-animation: sk-scaleout 1.0s infinite ease-in-out;
+    animation: sk-scaleout 1.0s infinite ease-in-out;
+}
+
+@-webkit-keyframes sk-scaleout {
+  0% { -webkit-transform: scale(0) }
+  100% {
+    -webkit-transform: scale(1.0);
+    opacity: 0;
+  }
+}
+
+@keyframes sk-scaleout {
+  0% { 
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  } 100% {
+    -webkit-transform: scale(1.0);
+    transform: scale(1.0);
+    opacity: 0;
+  }
+}
+
+
+/*@keyframes flipInX {
+  from {
+    transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
+    animation-timing-function: ease-in;
+    opacity: 0;
+  }
+
+  40% {
+    transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
+    animation-timing-function: ease-in;
+  }
+
+  60% {
+    transform: perspective(400px) rotate3d(1, 0, 0, 10deg);
+    opacity: 1;
+  }
+
+  80% {
+    transform: perspective(400px) rotate3d(1, 0, 0, -5deg);
+  }
+
+  to {
+    transform: perspective(400px);
+  }
+}
+
+.flipInX {
+  -webkit-backface-visibility: visible !important;
+  backface-visibility: visible !important;
+  animation-name: flipInX;
+}
+
+
+@keyframes flipOutX {
+  from {
+    transform: perspective(400px);
+  }
+
+  30% {
+    transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
+    opacity: 1;
+  }
+
+  to {
+    transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
+    opacity: 0;
+  }
+}
+
+.flipOutX {
+  animation-name: flipOutX;
+  -webkit-backface-visibility: visible !important;
+  backface-visibility: visible !important;
+}*/

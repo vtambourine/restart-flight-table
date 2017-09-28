@@ -17,16 +17,16 @@ const DEPARTING_STATUSES = {
 
 // Flight statuses for arriving flights
 const ARRIVING_STATUSES = {
-  SCH: { text: 'Scheduled',                mood:  0 },
-  AIR: { text: 'Airborne',                 mood:  0 },
-  EXP: { text: 'Expected',                 mood:  0 },
-  FIR: { text: 'Flight in Dutch airspace', mood:  0 },
-  LND: { text: 'Landed',                   mood:  1 },
-  FIB: { text: 'FIBAG',                    mood:  0 },
-  ARR: { text: 'Arrived',                  mood:  0 },
-  DIV: { text: 'Diverted',                 mood: -1 },
-  CNX: { text: 'Cancelled',                mood: -1 },
-  TOM: { text: 'Tomorrow',                 mood: -1 }
+  SCH: { text: 'Scheduled',      mood:  0 },
+  AIR: { text: 'Airborne',       mood:  0 },
+  EXP: { text: 'Expected',       mood:  0 },
+  FIR: { text: 'Flight inbound', mood:  0 },
+  LND: { text: 'Landed',         mood:  1 },
+  FIB: { text: 'FIBAG',          mood:  0 },
+  ARR: { text: 'Arrived',        mood:  0 },
+  DIV: { text: 'Diverted',       mood: -1 },
+  CNX: { text: 'Cancelled',      mood: -1 },
+  TOM: { text: 'Tomorrow',       mood: -1 }
 };
 
 // Flight directions
@@ -308,5 +308,52 @@ class FlightApi {
   );
   arrivalsFlightTable.fetchFlights();
   $('#refresh-a').click(arrivalsFlightTable.fetchFlights);
+
+  var statusInterval = window.setInterval(flipStatus, 4000);
+
+  flipStatus();
+
+  function flipStatus(){
+    $.each($('td.status'), function(index, element){
+      $activeElement = $(element).find(".visible");
+
+      if($activeElement.length == 0){
+        $(element).children().first().addClass('visible');
+        return;
+      }
+      else if($activeElement.siblings().length == 0)
+        return;
+      else{
+        $activeElement.removeClass('visible');
+        if( $activeElement.next().length != 0)
+          $activeElement.next().addClass('visible');
+        else
+          $activeElement.siblings().first().addClass('visible');
+      }
+    });
+  }
+
+  // function flipStatus(){
+  //   $.each($("td.status"), function(index, element){
+  //     if($(element).find("span").length > 2){
+  //       $activeElement = $(element).find(".visible");
+  //       if($activeElement.length != 0){
+  //         $activeElement.removeClass("visible");
+  //         if($activeElement.next().length != 0){
+  //           $activeElement.next().addClass("visible");
+  //         }
+  //         else{
+  //           $activeElement.siblings().first().addClass("visible");        
+  //         }
+  //       }
+  //       else{
+  //         $(element).find("span").first().addClass("visible");
+  //       }
+  //     }
+  //     else{
+  //       $(element).find("span").first().addClass("visible");
+  //     }
+  //   });
+  // }
 
 })();
