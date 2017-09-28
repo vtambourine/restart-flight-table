@@ -2,12 +2,12 @@
     Custom styles go here
 */
 
-body{
+body {
     background-color: #222;
     color: #fafafa;
 }
 
-.board-title{    
+.board-title {
     background-color: #ffd257;
     color: #000;
     font-family: 'Roboto', sans-serif;
@@ -18,71 +18,71 @@ body{
     padding: 10px 20px;
 }
 
-.board-table tbody{
+.board-table tbody {
     font-family: 'Share Tech Mono', monospace;
 }
 
-.flight-number{
+.flight-number {
     width: 20%;
     color: #ffd257;
 }
 
-.destination{
+.destination {
     width: 25%;
 }
 
-.time{
+.time {
     width: 15%;
 }
 
-.gate{
+.gate {
     width: 10%;
-    color: #ffd257;   
+    color: #ffd257;
 }
 
-.status{
+.status {
     color: #ffd257;
     width: 30%;
     text-align: right;
 }
 
 .status span {
-    display: none;
+    /*display: none;*/
 }
 
-.status span.visible{
+.status span.visible {
     display: block;
 }
 
-.status .negative{
+.status .negative {
     color: #ff6c6c;
 }
 
-.status .positive{
+.status .positive {
     color: #96d99d;
 }
 
 .board-table td,
-.board-table th{
+.board-table th {
     border-bottom: 1px solid #555;
 }
 
-.board-table th{
+.board-table th {
     padding: 12px 6px;
     color: #FFF
 }
 
-.board-table td{
+.board-table td {
     padding: 4px 6px;
 }
 
 .board-table td:first-child,
-.board-table th:first-child{
+.board-table th:first-child {
     padding-left: 0
 }
 
 .board-table td:last-child,
-.board-table th:last-child{
+.board-table th:last-child {
     padding-right: 0;
 }
 
@@ -101,7 +101,7 @@ body{
     bottom: 0;
     margin: auto;
     background-color: #ffd257;
-    border-radius: 100%;  
+    border-radius: 100%;
     -webkit-animation: sk-scaleout 1.0s infinite linear;
     animation: sk-scaleout 1.0s infinite linear;
 }
@@ -119,7 +119,7 @@ body{
 }
 
 @keyframes sk-scaleout {
-    0% { 
+    0% {
         -webkit-transform: scale(0);
         transform: scale(0);
     }
