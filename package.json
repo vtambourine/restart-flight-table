@@ -1,0 +1,12 @@
+{
+  "name": "restart-flight-table",
+  "version": "1.0.0",
+  "description": "Schiphol airport flight table. Front-end class at Re/Start Amsterdam",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vtambourine/restart-flight-table.git"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.18.13"
+  }
+}
